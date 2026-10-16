@@ -20,3 +20,17 @@ add_test(
   COMMAND /bin/bash -c
     "$<TARGET_FILE:tilelangir-opt> --tilelangir-convert-tl-to-hivm \"${CMAKE_CURRENT_SOURCE_DIR}/Conversion/TLToHIVM/alloc-copy-add.mlir\" | \"${_filecheck}\" \"${CMAKE_CURRENT_SOURCE_DIR}/Conversion/TLToHIVM/alloc-copy-add.mlir\""
 )
+
+foreach(_op sub mul div max min)
+  add_test(
+    NAME tilelangir-tl-alloc-copy-${_op}
+    COMMAND /bin/bash -c
+      "$<TARGET_FILE:tilelangir-opt> \"${CMAKE_CURRENT_SOURCE_DIR}/Dialect/TL/alloc-copy-${_op}.mlir\" | \"${_filecheck}\" \"${CMAKE_CURRENT_SOURCE_DIR}/Dialect/TL/alloc-copy-${_op}.mlir\""
+  )
+
+  add_test(
+    NAME tilelangir-convert-tl-to-hivm-alloc-copy-${_op}
+    COMMAND /bin/bash -c
+      "$<TARGET_FILE:tilelangir-opt> --tilelangir-convert-tl-to-hivm \"${CMAKE_CURRENT_SOURCE_DIR}/Conversion/TLToHIVM/alloc-copy-${_op}.mlir\" | \"${_filecheck}\" \"${CMAKE_CURRENT_SOURCE_DIR}/Conversion/TLToHIVM/alloc-copy-${_op}.mlir\""
+  )
+endforeach()
